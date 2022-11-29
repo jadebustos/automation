@@ -1,5 +1,12 @@
 ---
 
+- name: disable configuration service
+  systemd:
+    name: initial-configuration
+    enabled: no
+    masked: yes
+  become: yes
+  
 - name: reboot
   reboot:
   become: yes

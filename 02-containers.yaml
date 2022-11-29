@@ -1,6 +1,6 @@
 ---
 
-- name: configuring containers registries
+- name: configuring container registries
   hosts: all
   gather_facts: false
   roles:

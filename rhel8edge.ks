@@ -97,3 +97,28 @@ EOF
 # workaround to upgrade to rhel 9 works
 /usr/bin/chmod 0600 /etc/ssh/ssh_host*
 %end
+
+%post
+/usr/bin/cat > /etc/systemd/system/initial-configuration.service <<EOF
+##
+## Create service to call automation controller to configure
+##
+
+[Unit]
+Description=Initial configuration
+After=network-online.target remote-fs.target
+Requires=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/curl -k -f -i -H 'Content-Type:application/json' -XPOST -d '{"host_config_key": "redhat"}' https://controller.melmac.univ/api/v2/job_templates/9/callback/
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+usr/bin/chmod 0644  /etc/systemd/system/initial-configuration.service
+
+/usr/bin/systemctl enable initial-configuration.service
+%end
