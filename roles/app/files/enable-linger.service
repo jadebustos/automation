@@ -1,0 +1,7 @@
+# enable linger so user services run whether user logged in or not
+[Service]
+Type=oneshot
+ExecStart=loginctl enable-linger core
+
+[Install]
+WantedBy=multi-user.target default.target

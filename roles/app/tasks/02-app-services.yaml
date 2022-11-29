@@ -103,3 +103,10 @@
     - /var/home/core/.config/systemd/user/default.target.wants/pre-pull-container-image.service
     - /var/home/core/.config/systemd/user/multi-user.target.wants/pre-pull-container-image.service
 
+- name: fix ownership of user local files
+  shell: /usr/bin/chown -R core: /var/home/core
+  become: yes
+
+- name: fix SELinux contexts
+  shell: /usr/sbin/restorecon -vFr /var/home/core
+  become: yes

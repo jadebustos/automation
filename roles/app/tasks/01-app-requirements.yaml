@@ -1,2 +1,27 @@
 ---
 
+- name: enable linger so user services run whether user logged in or not
+  copy:
+    src: enable-linger.service
+    dest: /etc/systemd/system/enable-linger.service
+    owner: root
+    group: root
+    mode: 0644
+    setype: 'systemd_unit_file_t'
+  become: yes
+
+- name: enable linger service
+  systemd:
+    name: enable-linger.service
+    state: started
+    enabled: yes
+    masked: no     
+  become: yes
+
+- name: open app port
+  ansible.posix.firewalld:
+    port: 8080/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
+  become: yes
