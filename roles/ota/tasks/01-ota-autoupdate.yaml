@@ -1,0 +1,48 @@
+---
+
+#
+# Set the rpm-ostree update policy to automatically download and
+# stage updates to be applied at the next reboot
+#
+
+# stage updates as they become available. This is highly recommended
+- name: configure automatic update policy
+  lineinfile:
+    path: /etc/rpm-ostreed.conf
+    regexp: '^AutomaticUpdatePolicy='
+    line: AutomaticUpdatePolicy=stage
+  become: yes
+
+- name: check for updates services
+  copy:
+    src: applyupdate.service
+    dest: /etc/systemd/system/applyupdate.service
+    owner: root
+    group: root
+    mode: 0644
+    setype: 'systemd_unit_file_t'
+  become: yes
+
+- name: check for updates services timer
+  copy:
+    src: applyupdate.timer
+    dest: /etc/systemd/system/applyupdate.timer
+    owner: root
+    group: root
+    mode: 0644
+    setype: 'systemd_unit_file_t'
+  become: yes
+
+# The rpm-ostreed-automatic.timer and accompanying service will
+# check for operating system updates and stage them. The applyupdate.timer
+# will reboot the system to force an upgrade.
+- name: enable service for autoupdates
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+    masked: no      
+  become: yes
+  loop:
+    - rpm-ostreed-automatic.timer 
+    - applyupdate.timer

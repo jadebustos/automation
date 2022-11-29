@@ -1,0 +1,15 @@
+##
+## Create service and timer to periodically check if there's staged
+## updates and then reboot to apply them.
+##
+
+# This systemd service runs one time and exits after each timer
+# event. If there are staged updates to the operating system, the
+# system is rebooted to apply them.
+
+[Unit]
+Description=Apply Update Check
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'if [[ $(rpm-ostree status -v | grep "Staged: yes") ]]; then systemctl --message="Applying OTA update" reboot; else logger "Running latest available update"; fi'

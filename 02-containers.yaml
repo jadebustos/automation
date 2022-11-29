@@ -1,0 +1,7 @@
+---
+
+- name: configuring containers registries
+  hosts: *
+  gather_facts: false
+  roles:
+    - containers

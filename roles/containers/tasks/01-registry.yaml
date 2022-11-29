@@ -1,0 +1,11 @@
+---
+
+- name: add registries
+  copy:
+    src: registries.conf
+    dest: /etc/containers/registries.conf
+    owner: root
+    group: root
+    mode: 0644
+    setype: 'etc_t'
+  become: yes

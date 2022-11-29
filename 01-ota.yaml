@@ -1,0 +1,7 @@
+---
+
+- name: configuring ota updates
+  hosts: *
+  gather_facts: false
+  roles:
+    - ota
