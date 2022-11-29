@@ -2,7 +2,7 @@
 
 - name: deploy application
   hosts: all
-  gather_facts: false
+  gather_facts: true
   roles:
     - ota
     - containers
