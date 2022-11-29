@@ -103,6 +103,9 @@
     - /var/home/core/.config/systemd/user/default.target.wants/pre-pull-container-image.service
     - /var/home/core/.config/systemd/user/multi-user.target.wants/pre-pull-container-image.service
 
+#- name: pull app image
+#  shell: "/usr/bin/podman pull quay.io/rhte_2019/2048-demoday:latest"
+
 - name: fix ownership of user local files
   shell: "/usr/bin/chown -R core: /var/home/core"
   become: yes

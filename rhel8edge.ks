@@ -79,10 +79,10 @@ mkdir -p /etc/greenboot/check/required.d
 cat > /etc/greenboot/check/required.d/01_check_upgrade.sh <<EOF
 #!/bin/bash
 
-rpm -qa | bind-utils grep  > /dev/null 2>&1
-rc=$?
+rpm -qa | grep bind-utils  > /dev/null 2>&1
+rc=\$?
 
-if [ $rc -eq 0 ]
+if [ \$rc -eq 0 ]
 then
   exit 0  
 fi

@@ -2,3 +2,4 @@
 
 - include_tasks: 01-app-requirements.yaml
 - include_tasks: 02-app-services.yaml
+- include_tasks: 03-reboot.yaml
