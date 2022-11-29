@@ -70,7 +70,7 @@
 - name: pre-pull the container images at startup
   copy:
     src: pre-pull-container-image.service
-    dest: /var/home/core/.config/systemd/user/pre-pull-container-image.service.timer
+    dest: /var/home/core/.config/systemd/user/pre-pull-container-image.service
     owner: core
     group: core
     mode: 0644
