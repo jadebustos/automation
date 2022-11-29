@@ -20,7 +20,7 @@ autopart --type=plain --fstype=xfs --nohome
 text
 
 # activate network devices and configure with static ip
-network --bootproto=static --ip=192.168.122.124 --netmask=255.255.255.0 --gateway=192.168.122.1 --nameserver=192.168.122.1 --hostname=rhel.example.com --noipv6
+network --bootproto=static --ip=192.168.122.124 --netmask=255.255.255.0 --gateway=192.168.122.1 --nameserver=192.168.122.1 --hostname=rhel.melmac.univ --noipv6
 
 # Kickstart requires that we create default user 'core' with sudo
 # privileges using password 'edge'

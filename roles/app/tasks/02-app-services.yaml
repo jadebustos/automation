@@ -12,7 +12,7 @@
   file:
     path: "{{ item }}"
     mode: 0755
-    user: core
+    owner: core
     group: core
     state: directory
     setype: 'systemd_unit_file_t'
@@ -78,25 +78,25 @@
 
 - name: enable socket listener
   file:
-    path: /var/home/core/.config/systemd/user/container-httpd-proxy.socket
+    src: /var/home/core/.config/systemd/user/container-httpd-proxy.socket
     dest: /var/home/core/.config/systemd/user/sockets.target.wants/container-httpd-proxy.socket
-    user: core
+    owner: core
     group: core
     state: link
 
 - name: enable timer
   file:
-    path: /var/home/core/.config/systemd/user/podman-auto-update.timer
+    src: /var/home/core/.config/systemd/user/podman-auto-update.timer
     dest: /var/home/core/.config/systemd/user/timers.target.wants/podman-auto-update.timer
-    user: core
+    owner: core
     group: core
     state: link
 
 - name:  enable pre-pull container image
   file:
-    path: /var/home/core/.config/systemd/user/pre-pull-container-image.service
+    src: /var/home/core/.config/systemd/user/pre-pull-container-image.service
     dest: "{{ item }}"
-    user: core
+    owner: core
     group: core
     state: link
   loop:
@@ -104,7 +104,7 @@
     - /var/home/core/.config/systemd/user/multi-user.target.wants/pre-pull-container-image.service
 
 - name: fix ownership of user local files
-  shell: /usr/bin/chown -R core: /var/home/core
+  shell: "/usr/bin/chown -R core: /var/home/core"
   become: yes
 
 - name: fix SELinux contexts
