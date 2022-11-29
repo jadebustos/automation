@@ -1,0 +1,24 @@
+##
+## Create a service and timer to periodically check if the container
+## image has been updated and then, if so, refresh the workload
+##
+
+# podman auto-update looks up containers with a specified
+# "io.containers.autoupdate" label (i.e., the auto-update policy).
+#
+# If the label is present and set to “image”, Podman reaches out
+# to the corresponding registry to check if the image has been updated.
+# An image is considered updated if the digest in the local storage
+# is different than the one in the remote registry. If an image must
+# be updated, Podman pulls it down and restarts the systemd unit
+# executing the container.
+
+[Unit]
+Description=Podman auto-update service
+Documentation=man:podman-auto-update(1)
+
+[Service]
+ExecStart=/usr/bin/podman auto-update
+
+[Install]
+WantedBy=multi-user.target default.target

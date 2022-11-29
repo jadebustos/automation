@@ -1,0 +1,22 @@
+#
+# Create a service to launch the container workload and restart
+# it on failure
+#
+
+# container-httpd.service
+
+[Unit]
+Description=Podman container-httpd.service
+Documentation=man:podman-generate-systemd(1)
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+Restart=on-failure
+TimeoutStopSec=70
+ExecStartPre=/bin/rm -f %t/container-httpd.pid %t/container-httpd.ctr-id
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/container-httpd.pid --cidfile %t/container-httpd.ctr-id --cgroups=no-conmon --replace -d --label io.containers.autoupdate=image --name httpd -p 127.0.0.1:8080:8081 quay.io/rhte_2019/2048-demoday:latest
+ExecStartPost=/bin/sleep 1
+ExecStop=/usr/bin/podman stop --ignore --cidfile %t/container-httpd.ctr-id -t 10
+ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/container-httpd.ctr-id
+PIDFile=%t/container-httpd.pid
+Type=forking

@@ -1,0 +1,105 @@
+---
+
+#
+# Create a scale from zero systemd service for a container web
+# server using socket activation
+#
+
+# create systemd user directories for rootless services, timers,
+# and sockets
+
+- name: create directories for systemd units
+  file:
+    path: "{{ item }}"
+    mode: 0755
+    user: core
+    group: core
+    state: directory
+    setype: 'systemd_unit_file_t'
+  loop:
+    - /var/home/core/.config/systemd/user/default.target.wants
+    - /var/home/core/.config/systemd/user/sockets.target.wants
+    - /var/home/core/.config/systemd/user/timers.target.wants
+    - /var/home/core/.config/systemd/user/multi-user.target.wants
+
+- name: define listener for socket activation
+  template:
+    src: container-httpd-proxy.socket.j2
+    dest: /var/home/core/.config/systemd/user/container-httpd-proxy.socket
+    owner: core
+    group: core
+    mode: 0644
+    setype: 'systemd_unit_file_t'
+
+- name: define proxy service that launches web container and forwards requests to it
+  copy:
+    src: container-httpd-proxy.service
+    dest: /var/home/core/.config/systemd/user/container-httpd-proxy.service
+    owner: core
+    group: core
+    mode: 0644
+    setype: 'systemd_unit_file_t'
+
+- name: create a service to launch the container workload and restart it on failure
+  copy:
+    src: container-httpd.service
+    dest: /var/home/core/.config/systemd/user/container-httpd.service
+    owner: core
+    group: core
+    mode: 0644
+    setype: 'systemd_unit_file_t'
+
+- name: create a service and timer to periodically check if the container image has been updated
+  copy:
+    src: podman-auto-update.service
+    dest: /var/home/core/.config/systemd/user/podman-auto-update.service
+    owner: core
+    group: core
+    mode: 0644
+    setype: 'systemd_unit_file_t'
+
+- name: podman-autoupdate timer
+  copy:
+    src: podman-auto-update.timer
+    dest: /var/home/core/.config/systemd/user/podman-auto-update.timer
+    owner: core
+    group: core
+    mode: 0644
+    setype: 'systemd_unit_file_t'
+
+- name: pre-pull the container images at startup
+  copy:
+    src: pre-pull-container-image.service
+    dest: /var/home/core/.config/systemd/user/pre-pull-container-image.service.timer
+    owner: core
+    group: core
+    mode: 0644
+    setype: 'systemd_unit_file_t'
+
+- name: enable socket listener
+  file:
+    path: /var/home/core/.config/systemd/user/container-httpd-proxy.socket
+    dest: /var/home/core/.config/systemd/user/sockets.target.wants/container-httpd-proxy.socket
+    user: core
+    group: core
+    state: link
+
+- name: enable timer
+  file:
+    path: /var/home/core/.config/systemd/user/podman-auto-update.timer
+    dest: /var/home/core/.config/systemd/user/timers.target.wants/podman-auto-update.timer
+    user: core
+    group: core
+    state: link
+
+- name:  enable pre-pull container image
+  file:
+    path: /var/home/core/.config/systemd/user/pre-pull-container-image.service
+    dest: "{{ item }}"
+    user: core
+    group: core
+    state: link
+  loop:
+    - /var/home/core/.config/systemd/user/default.target.wants/pre-pull-container-image.service
+    - /var/home/core/.config/systemd/user/multi-user.target.wants/pre-pull-container-image.service
+

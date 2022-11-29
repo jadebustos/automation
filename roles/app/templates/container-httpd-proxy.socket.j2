@@ -1,0 +1,8 @@
+# define listener for socket activation
+cat << EOF > /var/home/core/.config/systemd/user/container-httpd-proxy.socket
+[Socket]
+ListenStream={{ansible_default_ipv4['address']}}:8080
+FreeBind=true
+
+[Install]
+WantedBy=sockets.target

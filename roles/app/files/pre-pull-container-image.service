@@ -1,0 +1,9 @@
+# pre-pull the container images at startup to avoid delay in http response
+[Service]
+Type=simple
+ExecStart=podman pull quay.io/rhte_2019/2048-demoday:latest
+RestartSec=30
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target default.target
