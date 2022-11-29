@@ -75,11 +75,11 @@ EOF
 ## upgrade attempt.
 ##
 
-mkdir -p /etc/greenboot/check/required.d
-cat > /etc/greenboot/check/required.d/01_check_upgrade.sh <<EOF
+/usr/bin/mkdir -p /etc/greenboot/check/required.d
+/usr/bin/cat > /etc/greenboot/check/required.d/01_check_upgrade.sh <<EOF
 #!/bin/bash
 
-rpm -qa | grep bind-utils  > /dev/null 2>&1
+/usr/bin/rpm -qa | /usr/bin/grep bind-utils  > /dev/null 2>&1
 rc=\$?
 
 if [ \$rc -eq 0 ]
@@ -90,5 +90,8 @@ fi
 exit 1
 EOF
 
-chmod +x /etc/greenboot/check/required.d/01_check_upgrade.sh
+/usr/bin/chmod +x /etc/greenboot/check/required.d/01_check_upgrade.sh
+
+# workaround to upgrade to rhel 9 works
+/usr/bin/chmod 0600 /etc/ssh/ssh_host*
 %end

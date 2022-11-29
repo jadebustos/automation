@@ -1,0 +1,9 @@
+---
+
+- hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: reboot to upgrade
+      shell: "/usr/bin/systemctl reboot"
+      become: yes

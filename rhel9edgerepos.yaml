@@ -1,0 +1,9 @@
+---
+
+- hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: configure rhel9 edge respositories
+      shell: "/usr/bin/ostree remote add --set=url=http://192.168.122.1/ostree-rhel9/repo/ --set=gpg-verify=false rhel9 http://192.168.122.1/ostree-rhel9/repo/"
+      become: yes

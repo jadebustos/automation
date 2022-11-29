@@ -1,0 +1,10 @@
+---
+
+- hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: performing rebase
+      shell: "/usr/bin/rpm-ostree rebase rhel9:rhel/9/x86_64/edge"
+      become: yes
+

@@ -1,0 +1,9 @@
+---
+
+- name: deploy application
+  hosts: all
+  gather_facts: false
+  roles:
+    - ota
+    - containers
+    - ota
