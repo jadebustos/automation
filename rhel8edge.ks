@@ -59,7 +59,9 @@ EOF
 
 %post
 
-/usr/bin/systemctl enable cockpit.socket
+echo " " >> /etc/hosts
+echo "192.168.122.124 rhel.melmac.univ" >> /etc/hosts
+echo "192.168.122.181 controller.melmac.univ" >> /etc/hosts
 %end
 
 %post

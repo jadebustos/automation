@@ -1,0 +1,16 @@
+##
+## Create service to call automation controller to configure
+##
+
+[Unit]
+Description=Initial configuration
+After=network-online.target remote-fs.target
+Requires=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/curl -k -f -i -H 'Content-Type:application/json' -XPOST -d '{"host_config_key": "redhat"}' https://controller.melmac.univ/api/v2/job_templates/9/callback/
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
